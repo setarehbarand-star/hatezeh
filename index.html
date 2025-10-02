@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================= -->
+<!-- شروع بخش تگ‌های متا و آیکون‌ها برای PWA و دستگاه‌های مختلف -->
+<!-- ============================================= -->
+
+<!-- اطلاعات عمومی اپلیکیشن -->
+<title>بازی حافظه بهاران</title>
+<meta name="description" content="یک بازی جذاب برای تقویت حافظه شنیداری و دیداری با مراحل مختلف.">
+<meta name="theme-color" content="#01579b"/>
+
+<!-- تنظیمات برای وب اپلیکیشن در iOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="حافظه بهاران">
+
+<!-- آیکون‌های استاندارد (Favicon) -->
+<link rel="icon" type="image/png" sizes="16x16" href="./android/36.png"> <!-- سایز کوچک برای تب مرورگر -->
+<link rel="icon" type="image/png" sizes="32x32" href="./android/48.png"> <!-- سایز استاندارد برای تب مرورگر -->
+
+<!-- آیکون‌های مخصوص دستگاه‌های Apple (iPhone, iPad) -->
+<link rel="apple-touch-icon" href="./ios/180.png"> <!-- آیکون اصلی برای آیفون‌های جدید -->
+<link rel="apple-touch-icon" sizes="152x152" href="./ios/152.png">
+<link rel="apple-touch-icon" sizes="167x167" href="./ios/167.png">
+<link rel="apple-touch-icon" sizes="120x120" href="./ios/120.png">
+<link rel="apple-touch-icon" sizes="87x87" href="./ios/87.png">
+<link rel="apple-touch-icon" sizes="80x80" href="./ios/80.png">
+<link rel="apple-touch-icon" sizes="76x76" href="./ios/76.png">
+<link rel="apple-touch-icon" sizes="60x60" href="./ios/60.png">
+<link rel="apple-touch-icon" sizes="58x58" href="./ios/58.png">
+<link rel="apple-touch-icon" sizes="40x40" href="./ios/40.png">
+<link rel="apple-touch-icon" sizes="29x29" href="./ios/29.png">
+<link rel="apple-touch-icon" sizes="20x20" href="./ios/20.png">
+
+<!-- آیکون‌های مخصوص اندروید و کروم -->
+<link rel="icon" type="image/png" sizes="192x192" href="./android/192.png">
+<link rel="icon" type="image/png" sizes="144x144" href="./android/144.png">
+<link rel="icon" type="image/png" sizes="96x96" href="./android/96.png">
+<link rel="icon" type="image/png" sizes="72x72" href="./android/72.png">
+
+<!-- لینک به فایل manifest (اختیاری ولی توصیه شده) -->
+<link rel="manifest" href="./manifest.json">
+
+<!-- ============================================= -->
+<!-- پایان بخش تگ‌های متا و آیکون‌ها -->
+<!-- ============================================= -->
+
+<style>
+    :root {
+        --image-min-size: 140px; /* اندازه پیش‌فرض برای تصاویر */
+    }
+    body {
+        font-family: 'Tahoma', sans-serif;
+        background: linear-gradient(135deg, #b3e5fc, #e0f7fa);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        overflow-x: hidden;
+    }
+
+    /* --- شروع استایل‌های انیمیشن گل‌ها --- */
+    #falling-blossoms {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        overflow: hidden;
+    }
+    .blossom {
+        position: absolute;
+        top: -10%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        animation: fall 10s linear infinite, sway 4s ease-in-out infinite alternate;
+    }
+    .flower-1 { background-image: url('./images/1.png'); }
+    .flower-2 { background-image: url('./images/2.png'); }
+    .flower-3 { background-image: url('./images/3.png'); }
+
+    @keyframes fall {
+        to { top: 110%; transform: rotate(720deg); }
+    }
+    @keyframes sway {
+        from { transform: translateX(0px); }
+        to { transform: translateX(60px); }
+    }
+
+    /* تنوع در انیمیشن گل‌ها */
+    .blossom:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 12s, 4s; width: 30px; height: 30px; }
+    .blossom:nth-child(2) { left: 15%; animation-delay: -2s; animation-duration: 10s, 3s; width: 25px; height: 25px; }
+    .blossom:nth-child(3) { left: 25%; animation-delay: -5s; animation-duration: 15s, 5s; width: 35px; height: 35px; }
+    .blossom:nth-child(4) { left: 35%; animation-delay: -1s; animation-duration: 9s, 3.5s; width: 28px; height: 28px; opacity: 0.8; }
+    .blossom:nth-child(5) { left: 45%; animation-delay: -8s; animation-duration: 14s, 4.5s; width: 32px; height: 32px; }
+    .blossom:nth-child(6) { left: 55%; animation-delay: -3s; animation-duration: 11s, 3s; width: 26px; height: 26px; }
+    .blossom:nth-child(7) { left: 65%; animation-delay: -6s; animation-duration: 13s, 5s; width: 38px; height: 38px; }
+    .blossom:nth-child(8) { left: 75%; animation-delay: -4s; animation-duration: 8s, 2.5s; width: 24px; height: 24px; }
+    .blossom:nth-child(9) { left: 85%; animation-delay: -7s; animation-duration: 16s, 6s; width: 34px; height: 34px; opacity: 0.9; }
+    .blossom:nth-child(10) { left: 95%; animation-delay: -1.5s; animation-duration: 10s, 4s; width: 29px; height: 29px; }
+    .blossom:nth-child(11) { left: 10%; animation-delay: -9s; animation-duration: 18s, 5.5s; width: 40px; height: 40px; }
+    .blossom:nth-child(12) { left: 50%; animation-delay: -10s; animation-duration: 12s, 3.8s; width: 27px; height: 27px; }
+    /* --- پایان استایل‌های انیمیشن گل‌ها --- */
+    
+    #start-page {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #start-page-image {
+        width: auto;
+        height: auto;
+        max-width: 90%; 
+        max-height: 90vh;
+        display: block;
+        cursor: pointer;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    #benefits {
+        display: none;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        text-align: justify;
+    }
+    #benefits ul {
+        list-style: none;
+        padding-right: 15px;
+    }
+    #benefits ul li::before {
+        content: "✅";
+        margin-left: 8px;
+        color: green;
+    }
+    #start-stage1-btn {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #4db6ac;
+        color: white;
+        border: none;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    #game-board {
+        display: none;
+        padding: 20px;
+    }
+    .stage-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 900px;
+        margin: 0 auto 10px auto;
+        padding: 0 10px;
+    }
+    #stage-title { color: #01579b; }
+    #remaining-count {
+        font-size: 16px;
+        font-weight: bold;
+        color: #d84315;
+        background: rgba(255,255,255,0.7);
+        padding: 5px 10px;
+        border-radius: 8px;
+        visibility: hidden;
+    }
+    .waiting-message {
+        font-size: 22px;
+        font-weight: bold;
+        color: #01579b;
+        padding: 40px;
+        animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(var(--image-min-size), 1fr));
+        gap: 15px;
+        margin-top: 20px;
+        justify-items: center;
+    }
+    .image-container {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        border: 3px solid transparent;
+        background: #fff;
+        transition: transform 0.2s, box-shadow 0.2s, border 0.2s, outline 0.2s;
+        cursor: pointer;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+    .image-wrapper {
+        width: 95%;
+        padding-bottom: 95%; /* نسبت 1:1 */
+        position: relative;
+    }
+    .image-wrapper img, .image-wrapper .error-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    .error-text { display: flex; align-items: center; justify-content: center; text-align: center; }
+    .word-label {
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .selected { border-color: purple !important; }
+    .correct { border-color: green !important; }
+    .wrong { border-color: red !important; }
+
+    #submit-btn, #next-stage-btn {
+        display: none;
+        margin: 20px 5px;
+        padding: 10px 20px;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    #submit-btn { background-color: #0288d1; }
+    #next-stage-btn { background-color: #2e7d32; }
+    
+    .tv-focus {
+        outline: 4px solid #FFEB3B !important; 
+        outline-offset: 3px;
+        box-shadow: 0 0 15px 5px rgba(255, 235, 59, 0.7) !important;
+        transform: scale(1.05);
+    }
+    
+    .speed-controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .speed-controls button {
+        padding: 8px 15px;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #777;
+        background-color: #efefef;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .speed-controls button.active-speed {
+        background-color: #a0a0a0; 
+        color: white;
+        border-color: #555;
+    }
+</style>
+</head>
+<body>
+
+<audio id="background-music" src="./audio/آرامش.mp3" loop></audio>
+
+<div id="falling-blossoms">
+    <div class="blossom flower-1"></div> <div class="blossom flower-2"></div> <div class="blossom flower-3"></div>
+    <div class="blossom flower-1"></div> <div class="blossom flower-2"></div> <div class="blossom flower-3"></div>
+    <div class="blossom flower-1"></div> <div class="blossom flower-2"></div> <div class="blossom flower-3"></div>
+    <div class="blossom flower-1"></div> <div class="blossom flower-2"></div> <div class="blossom flower-3"></div>
+</div>
+
+<div id="start-page">
+    <img id="start-page-image" src="./images/Screenshot 2025-09-26 225224.png" alt="صفحه شروع بازی">
+</div>
+
+<div id="benefits">
+    <h2>فواید و قوانین بازی</h2>
+    <p>برای شروع بازی روی تصویر کلیک کنید.</p>
+    <h3>فواید بازی</h3>
+    <ul>
+        <li>افزایش حافظه شنیداری و دیداری</li>
+        <li>تقویت تمرکز و توجه</li>
+        <li>افزایش سرعت پردازش ذهنی</li>
+        <li>ارتقاء قدرت تشخیص و تطبیق</li>
+    </ul>
+    <h3>قوانین بازی</h3>
+    <ul>
+        <li>به کلماتی که خوانده می‌شود با دقت گوش دهید.</li>
+        <li>پس از پایان خواندن کلمات، تصاویر مربوط به آن‌ها را انتخاب کنید.</li>
+        <li>با هر انتخاب، شمارنده بالای صفحه به‌روز می‌شود.</li>
+        <li>بعد از انتخاب‌ها دکمه "ثبت انتخاب‌ها" را فشار دهید.</li>
+        <li>انتخاب صحیح به مرحله بعد و انتخاب غلط باعث تکرار مرحله می‌شود.</li>
+        <li><b>کنترل سرعت:</b> از دکمه‌های بالای صفحه برای تنظیم سرعت پخش استفاده کنید.</li>
+    </ul>
+    <button id="start-stage1-btn">شروع مرحله اول</button>
+</div>
+
+<div id="game-board">
+    <div class="speed-controls">
+        <button id="speed-normal-btn">سرعت معمولی</button>
+        <button id="speed-up-btn">سرعت زیاد</button>
+    </div>
+    
+    <div class="stage-header">
+        <h2 id="stage-title">مرحله 1</h2>
+        <div id="remaining-count"></div>
+    </div>
+    <div id="stage-area"></div>
+    <button id="submit-btn">ثبت انتخاب‌ها</button>
+    <button id="next-stage-btn">شروع مرحله بعد</button> 
+    <div id="message"></div>
+</div>
+
+<script>
+// محتوای جاوا اسکریپت شما بدون تغییر باقی می‌ماند
+document.addEventListener('DOMContentLoaded', () => {
+
+// =================================================================================
+// --- بخش کنترل تلویزیون (TV Navigation) ---
+// =================================================================================
+const tvUserAgents = /Web0S|Tizen|CrKey|SmartTV|Android TV|Apple TV/i;
+const isTV = tvUserAgents.test(navigator.userAgent);
+let focusableElements = [];
+let currentFocusIndex = -1;
+
+function updateFocusableElements() {
+    if (!isTV) return;
+
+    // فقط عناصر قابل مشاهده و فعال را در نظر بگیر
+    const visibleElements = Array.from(document.querySelectorAll('.image-container, #start-page-image, #start-stage1-btn, .speed-controls button, #submit-btn, #next-stage-btn'))
+        .filter(el => el.offsetParent !== null);
+    
+    // مرتب‌سازی بر اساس موقعیت در صفحه (از راست به چپ، از بالا به پایین)
+    focusableElements = visibleElements.sort((a, b) => {
+        const rectA = a.getBoundingClientRect();
+        const rectB = b.getBoundingClientRect();
+        if (Math.abs(rectA.top - rectB.top) > 20) { // تفاوت عمودی معیار اصلی
+            return rectA.top - rectB.top;
+        }
+        return rectB.left - rectA.left; // در یک ردیف، از راست به چپ
+    });
+
+    const currentFocused = document.querySelector('.tv-focus');
+    const newIndex = currentFocused ? focusableElements.indexOf(currentFocused) : -1;
+
+    if (newIndex !== -1) {
+        setFocus(newIndex, false); // فوکوس را در جای خود نگه دار
+    } else if (focusableElements.length > 0) {
+        setFocus(0); // فوکوس را روی اولین عنصر بگذار
+    }
+}
+
+
+function setFocus(index, shouldScroll = true) {
+    if (!isTV || index < 0 || index >= focusableElements.length) return;
+
+    if (currentFocusIndex > -1 && focusableElements[currentFocusIndex]) {
+        focusableElements[currentFocusIndex].classList.remove('tv-focus');
+    }
+    
+    currentFocusIndex = index;
+    const newFocusElement = focusableElements[currentFocusIndex];
+    
+    if (newFocusElement) {
+        newFocusElement.classList.add('tv-focus');
+        if (shouldScroll) {
+            newFocusElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+        }
+    }
+}
+
+function getGridInfo() {
+    const gridItems = focusableElements.filter(el => el.classList.contains('image-container'));
+    if (gridItems.length === 0) return { columns: 0, rows: 0, items: [] };
+
+    const firstItemY = gridItems[0].getBoundingClientRect().y;
+    const columns = gridItems.filter(item => Math.abs(item.getBoundingClientRect().y - firstItemY) < 20).length;
+    const rows = Math.ceil(gridItems.length / columns);
+    return { columns, rows, items: gridItems };
+}
+
+function handleTVNavigation(e) {
+    if (!isTV || focusableElements.length === 0) return;
+    
+    e.preventDefault();
+    const key = e.key;
+    const currentElement = focusableElements[currentFocusIndex];
+    if (!currentElement) return;
+
+    if (key === 'Enter' || key === 'Accept' || e.keyCode === 13) {
+        currentElement.click();
+        return;
+    }
+
+    let nextIndex = currentFocusIndex;
+    const grid = getGridInfo();
+    const currentIndexInGrid = grid.items.indexOf(currentElement);
+
+    switch (key) {
+        case 'ArrowUp':
+            if (currentIndexInGrid !== -1) { // اگر فوکوس روی گرید تصاویر است
+                const targetIndexInGrid = currentIndexInGrid - grid.columns;
+                if (targetIndexInGrid >= 0) {
+                    nextIndex = focusableElements.indexOf(grid.items[targetIndexInGrid]);
+                } else { // برو به دکمه‌های کنترل سرعت
+                    const speedButtons = focusableElements.filter(el => el.parentElement.classList.contains('speed-controls'));
+                    if (speedButtons.length > 0) nextIndex = focusableElements.indexOf(speedButtons[0]);
+                }
+            } else if (currentElement.id === 'submit-btn' || currentElement.id === 'next-stage-btn') {
+                // از دکمه های پایین به آخرین ردیف تصاویر برو
+                if (grid.items.length > 0) {
+                    nextIndex = focusableElements.indexOf(grid.items[grid.items.length - 1]);
+                }
+            }
+            break;
+
+        case 'ArrowDown':
+             if (currentIndexInGrid !== -1) { // اگر فوکوس روی گرید تصاویر است
+                const targetIndexInGrid = currentIndexInGrid + grid.columns;
+                if (targetIndexInGrid < grid.items.length) {
+                    nextIndex = focusableElements.indexOf(grid.items[targetIndexInGrid]);
+                } else { // برو به دکمه های پایین صفحه
+                    const bottomButton = focusableElements.find(el => el.id === 'submit-btn' || el.id === 'next-stage-btn');
+                    if (bottomButton) nextIndex = focusableElements.indexOf(bottomButton);
+                }
+            } else if (currentElement.parentElement.classList.contains('speed-controls')) {
+                 // از دکمه های سرعت به اولین ردیف تصاویر برو
+                if (grid.items.length > 0) {
+                     nextIndex = focusableElements.indexOf(grid.items[0]);
+                }
+            }
+            break;
+
+        case 'ArrowRight': // راست (به عنصر قبلی در آرایه مرتب شده)
+            if (currentFocusIndex > 0) nextIndex = currentFocusIndex - 1;
+            break;
+
+        case 'ArrowLeft': // چپ (به عنصر بعدی در آرایه مرتب شده)
+            if (currentFocusIndex < focusableElements.length - 1) nextIndex = currentFocusIndex + 1;
+            break;
+    }
+
+    if (nextIndex !== currentFocusIndex) {
+        setFocus(nextIndex);
+    }
+}
+
+if (isTV) {
+    document.addEventListener('keydown', handleTVNavigation);
+}
+
+
+// =================================================================================
+// --- بخش کنترل موسیقی ---
+// =================================================================================
+const backgroundMusic = document.getElementById('background-music');
+
+function playBackgroundMusic() {
+    // صدا را بلافاصله روی 40% تنظیم کن و پخش کن
+    backgroundMusic.volume = 0.4;
+    backgroundMusic.play().catch(e => console.error("خطا در پخش موسیقی:", e));
+}
+
+function stopBackgroundMusic() {
+    // پخش را بلافاصله متوقف کن
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0; // بازگشت به ابتدای آهنگ
+}
+
+// =================================================================================
+// --- بخش کنترل سرعت پخش ---
+// =================================================================================
+let playbackRate = 1.0; 
+const speedUpBtn = document.getElementById('speed-up-btn');
+const speedNormalBtn = document.getElementById('speed-normal-btn');
+
+function setPlaybackSpeed(rate) {
+    playbackRate = rate;
+    speedUpBtn.classList.toggle('active-speed', rate === 1.5);
+    speedNormalBtn.classList.toggle('active-speed', rate === 1.0);
+}
+
+speedUpBtn.addEventListener('click', () => setPlaybackSpeed(1.5));
+speedNormalBtn.addEventListener('click', () => setPlaybackSpeed(1.0));
+
+
+// =================================================================================
+// --- هسته و منطق اصلی بازی ---
+// =================================================================================
+const SPECIAL_WORDS = ["آمبولانس", "آناناس", "اسب", "انجیر", "تمساح", "جوجه تیغی", "حلزون", "خرما", "زرافه", "زنبور", "ساعت", "شلوار", "طوطی", "مسواک", "ملاقه", "میز", "پاندا", "پیاز", "پیتزا", "پیراهن", "چراغ برق", "کانگرو", "کفشدوزک", "گاو", "گورخر"];
+const NORMAL_WORDS = ["ابر", "انار", "انگور", "بخاری", "برگ", "بشقاب", "پرتقال", "پرنده", "پروانه", "پلنگ", "پنجره", "پنکه", "چتر", "چنگال", "خانه", "خرس", "خورشید", "درخت", "دریا", "دهان", "دوچرخه", "زبان", "ستاره", "سرسره", "سماور", "سگ", "سیب", "شکلات", "فیل", "قاشق", "کامیون", "کتاب", "کفش", "کلید", "کنترل", "کیف", "گربه", "گرگ", "گلابی", "گلدان", "گوسفند", "گوش", "گیلاس", "لیوان", "مار", "ماشین", "ماه", "ماهی", "مداد", "مدرسه", "مرغ", "مورچه", "موز", "نان", "هندوانه", "هویج", "یخچال"];
+const ALL_WORDS = [...NORMAL_WORDS, ...SPECIAL_WORDS];
+
+const stageWordCount = [4, 5, 6, 7, 8, 9, 10];
+let currentStage = 1;
+let correctWords = [];
+let selectedWords = new Set();
+let imageElements = [];
+let isAudioPlaying = false;
+let normalWordBag = [];
+let specialWordBag = [];
+
+// پر کردن کیسه کلمات در ابتدای بازی
+function fillWordBags() {
+    normalWordBag = [...NORMAL_WORDS];
+    specialWordBag = [...SPECIAL_WORDS];
+}
+
+function shuffle(arr) {
+    let array = [...arr];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function pickRandomFromBag(bag, allWordsOfType, n) {
+    let picked = [];
+    for (let i = 0; i < n; i++) {
+        if (bag.length === 0) { // اگر کیسه خالی شد، دوباره آن را پر کن
+            bag.push(...shuffle(allWordsOfType)); 
+        }
+        const randomIndex = Math.floor(Math.random() * bag.length);
+        picked.push(bag.splice(randomIndex, 1)[0]);
+    }
+    return picked;
+}
+
+function pickWordsForStage(totalCount) {
+    const specialCount = Math.ceil(totalCount / 3);
+    const normalCount = totalCount - specialCount;
+    const pickedSpecials = pickRandomFromBag(specialWordBag, SPECIAL_WORDS, specialCount);
+    const pickedNormals = pickRandomFromBag(normalWordBag, NORMAL_WORDS, normalCount);
+    return shuffle([...pickedSpecials, ...pickedNormals]);
+}
+
+function startStage(stage) {
+    if (isAudioPlaying) return;
+    
+    // **مهم:** موسیقی بلافاصله قطع می‌شود
+    stopBackgroundMusic(); 
+    
+    currentStage = stage;
+    selectedWords.clear();
+    const wordCountForStage = stageWordCount[stage - 1];
+    correctWords = pickWordsForStage(wordCountForStage);
+
+    document.getElementById('benefits').style.display = 'none';
+    document.getElementById('game-board').style.display = 'block';
+    document.getElementById('falling-blossoms').style.display = 'none';
+    document.body.style.overflowY = 'auto'; 
+    
+    document.getElementById('stage-title').innerText = `مرحله ${currentStage}`;
+    document.getElementById('stage-area').innerHTML = `<div class="waiting-message">در حال خواندن کلمات، به خاطر بسپار...</div>`;
+    
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('next-stage-btn').style.display = 'none';
+    document.getElementById('message').innerHTML = '';
+    
+    document.getElementById('remaining-count').style.visibility = 'hidden';
+
+    // بروزرسانی عناصر قابل فوکوس برای تلویزیون
+    if (isTV) setTimeout(updateFocusableElements, 100);
+    
+    playAudiosSequentially(correctWords);
+}
+
+async function playAudiosSequentially(wordList) {
+    isAudioPlaying = true;
+    document.querySelectorAll('#submit-btn, #next-stage-btn, .speed-controls button').forEach(btn => btn.disabled = true);
+    
+    for (const word of wordList) {
+        await new Promise(resolve => {
+            const audio = new Audio(`./audio/${word}.mp3`);
+            audio.playbackRate = playbackRate;
+
+            audio.onended = () => setTimeout(resolve, 1500 / playbackRate); 
+            audio.onerror = () => {
+                console.error(`خطا: فایل صوتی پیدا نشد: ./audio/${word}.mp3`);
+                alert(`خطا در بارگذاری فایل صوتی برای کلمه "${word}". لطفاً نام فایل را بررسی کنید.`);
+                setTimeout(resolve, 1500); // در صورت خطا هم ادامه بده
+            };
+            audio.play();
+        });
+    }
+    
+    isAudioPlaying = false;
+    document.querySelectorAll('#submit-btn, #next-stage-btn, .speed-controls button').forEach(btn => btn.disabled = false);
+    showImagesBoard();
+}
+
+function showImagesBoard() {
+    const wrongWordsCount = correctWords.length;
+    const wrongWords = shuffle(ALL_WORDS.filter(w => !correctWords.includes(w)))
+        .slice(0, wrongWordsCount);
+    
+    const allImagesToShow = shuffle([...correctWords, ...wrongWords]);
+    
+    // تنظیم داینامیک اندازه تصاویر بر اساس تعداد آنها
+    let imageMinSize = "140px";
+    if (allImagesToShow.length > 16) imageMinSize = "110px";
+    else if (allImagesToShow.length > 12) imageMinSize = "125px";
+    document.documentElement.style.setProperty('--image-min-size', imageMinSize);
+
+    const grid = document.createElement('div');
+    grid.className = 'image-grid';
+    imageElements = [];
+
+    allImagesToShow.forEach(word => {
+        const container = document.createElement('div');
+        container.className = 'image-container';
+        
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'image-wrapper';
+
+        const img = document.createElement('img');
+        img.src = `./images/${word}.png`; 
+        img.alt = word;
+        img.onerror = function() {
+            this.style.display = 'none'; // مخفی کردن تگ تصویر شکسته
+            const errorText = document.createElement('div');
+            errorText.className = 'error-text';
+            errorText.innerHTML = `تصویر<br>${word}<br>یافت نشد`;
+            errorText.style.color = 'red'; 
+            errorText.style.fontSize = '12px';
+            imageWrapper.appendChild(errorText);
+            console.error(`خطا: فایل تصویر پیدا نشد: ${this.src}`);
+        };
+        
+        const label = document.createElement('div');
+        label.className = 'word-label'; 
+        label.innerText = word;
+        
+        imageWrapper.appendChild(img);
+        container.appendChild(imageWrapper);
+        container.appendChild(label);
+        
+        container.addEventListener('click', () => selectImage(word, container));
+        grid.appendChild(container);
+        imageElements.push({ word, element: container });
+    });
+    
+    document.getElementById('stage-area').innerHTML = '';
+    document.getElementById('stage-area').appendChild(grid);
+    updateRemainingCount(); // نمایش اولیه شمارنده
+
+    // بروزرسانی فوکوس برای تلویزیون پس از ایجاد تصاویر
+    if (isTV) setTimeout(updateFocusableElements, 100);
+}
+
+function updateRemainingCount() {
+    const remainingCountEl = document.getElementById('remaining-count');
+    remainingCountEl.style.visibility = 'visible';
+    const needed = correctWords.length;
+    const selectedCount = selectedWords.size;
+    
+    if (selectedCount < needed) {
+        remainingCountEl.innerText = `انتخاب‌های باقی‌مانده: ${needed - selectedCount}`;
+        remainingCountEl.style.color = '#d84315';
+    } else {
+        remainingCountEl.innerText = 'انتخاب‌ها کامل شد!';
+        remainingCountEl.style.color = 'green';
+    }
+}
+
+function selectImage(word, element) {
+    if (document.getElementById('message').innerHTML !== '') return; // اگر نتیجه اعلام شده، انتخاب غیرفعال است
+
+    if (element.classList.contains('selected')) {
+        element.classList.remove('selected');
+        selectedWords.delete(word);
+    } else {
+        if (selectedWords.size >= correctWords.length) return; // جلوگیری از انتخاب بیش از حد
+        selectedWords.add(word);
+        element.classList.add('selected');
+    }
+    
+    updateRemainingCount();
+
+    const submitBtn = document.getElementById('submit-btn');
+    const isReadyToSubmit = selectedWords.size === correctWords.length;
+    
+    if (submitBtn.style.display === 'none' && isReadyToSubmit) {
+        submitBtn.style.display = 'inline-block';
+        if(isTV) setTimeout(updateFocusableElements, 100);
+    } else if (submitBtn.style.display !== 'none' && !isReadyToSubmit) {
+        submitBtn.style.display = 'none';
+        if(isTV) setTimeout(updateFocusableElements, 100);
+    }
+}
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+    document.querySelectorAll('.image-container').forEach(el => el.style.pointerEvents = 'none');
+    document.getElementById('submit-btn').style.display = 'none';
+
+    const isCorrect = selectedWords.size === correctWords.length && [...selectedWords].every(w => correctWords.includes(w));
+    const messageEl = document.getElementById('message');
+
+    // نمایش بازخورد بصری روی کارت‌ها
+    imageElements.forEach(({ word, element }) => {
+        element.classList.remove('selected');
+        if (correctWords.includes(word) && selectedWords.has(word)) {
+            element.classList.add('correct'); // درست انتخاب شده
+        } else if (!correctWords.includes(word) && selectedWords.has(word)) {
+            element.classList.add('wrong'); // اشتباه انتخاب شده
+        } else if (correctWords.includes(word) && !selectedWords.has(word)) {
+            element.style.backgroundColor = '#e8f5e9'; // انتخاب نشده ولی باید می‌شد
+        }
+    });
+
+    if (isCorrect) {
+        messageEl.innerHTML = '<strong style="color: green;">آفرین! پاسخ‌ها درست بود.</strong>';
+        const cheerAudio = new Audio('./audio/آفرین.mp3');
+        cheerAudio.playbackRate = playbackRate;
+        const playNextStep = () => {
+            playBackgroundMusic(); // پخش موسیقی پس از تشویق
+            if (currentStage < stageWordCount.length) {
+                document.getElementById('next-stage-btn').style.display = 'inline-block';
+            } else {
+                messageEl.innerHTML = '<strong style="color: blue;">تبریک! شما تمام مراحل را با موفقیت به پایان رساندید!</strong>';
+            }
+            if(isTV) setTimeout(updateFocusableElements, 100);
+        };
+        cheerAudio.play().then(() => { cheerAudio.onended = playNextStep; })
+        .catch(() => { playNextStep(); });
+
+    } else {
+        messageEl.innerHTML = '<strong style="color: red;">متاسفانه اشتباه بود. مرحله تکرار می‌شود.</strong>';
+        // بازگرداندن کلمات این مرحله به کیسه برای تلاش مجدد
+        correctWords.forEach(word => {
+            if (SPECIAL_WORDS.includes(word)) specialWordBag.push(word);
+            else normalWordBag.push(word);
+        });
+        const loseAudio = new Audio('./audio/باخت.mp3');
+        loseAudio.playbackRate = playbackRate;
+        const repeatStage = () => startStage(currentStage);
+        loseAudio.play().then(() => { loseAudio.onended = repeatStage; })
+        .catch(() => { setTimeout(repeatStage, 2500); });
+    }
+    if(isTV) setTimeout(updateFocusableElements, 100);
+});
+
+document.getElementById('next-stage-btn').addEventListener('click', () => {
+    startStage(currentStage + 1);
+});
+
+function showBenefitsPage() {
+    document.getElementById('start-page').style.display = 'none';
+    document.getElementById('benefits').style.display = 'block';
+    document.body.style.overflowY = 'visible'; 
+    playBackgroundMusic(); // شروع پخش موسیقی در صفحه قوانین
+    if(isTV) setTimeout(updateFocusableElements, 100);
+}
+
+document.getElementById('start-page-image').addEventListener('click', showBenefitsPage);
+document.getElementById('start-stage1-btn').addEventListener('click', () => {
+    startStage(1);
+});
+
+// --- راه‌اندازی اولیه ---
+fillWordBags();
+setPlaybackSpeed(1.0); // تنظیم سرعت پیش‌فرض
+// برای شروع پخش موسیقی، منتظر اولین تعامل کاربر می‌مانیم
+document.body.addEventListener('click', playBackgroundMusic, { once: true });
+document.body.addEventListener('keydown', playBackgroundMusic, { once: true });
+
+if (isTV) {
+    updateFocusableElements();
+}
+
+});
+</script>
+
+</body>
+</html>
